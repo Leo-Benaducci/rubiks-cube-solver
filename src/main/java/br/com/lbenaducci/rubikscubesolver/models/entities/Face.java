@@ -24,6 +24,9 @@ public class Face implements Iterable<Color> {
 	}
 
 	public Color get(int position) {
+		if(position < 1 || position > 9) {
+			throw new IllegalStateException("Unexpected value: " + position);
+		}
 		return List.of(one, two, three, four, five, six, seven, eight, nine).get(position - 1);
 	}
 
@@ -38,9 +41,23 @@ public class Face implements Iterable<Color> {
 			case 7 -> this.seven = color;
 			case 8 -> this.eight = color;
 			case 9 -> this.nine = color;
-			default -> {
+			default -> throw new IllegalStateException("Unexpected value: " + position);
+		}
+	}
+
+	public int countColor(Color color) {
+		int count = 0;
+		for(Color c: this) {
+			if(c == color) {
+				count++;
 			}
 		}
+		return count;
+	}
+
+	public boolean isComplete() {
+		Color color = get(5);
+		return countColor(color) == 9;
 	}
 
 	public void rotateClockwise() {
@@ -85,5 +102,55 @@ public class Face implements Iterable<Color> {
 		return sb.toString();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+		if(o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
+		Face colors = (Face) o;
+
+		if(one != colors.one) {
+			return false;
+		}
+		if(two != colors.two) {
+			return false;
+		}
+		if(three != colors.three) {
+			return false;
+		}
+		if(four != colors.four) {
+			return false;
+		}
+		if(five != colors.five) {
+			return false;
+		}
+		if(six != colors.six) {
+			return false;
+		}
+		if(seven != colors.seven) {
+			return false;
+		}
+		if(eight != colors.eight) {
+			return false;
+		}
+		return nine == colors.nine;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = one != null ? one.hashCode() : 0;
+		result = 31 * result + (two != null ? two.hashCode() : 0);
+		result = 31 * result + (three != null ? three.hashCode() : 0);
+		result = 31 * result + (four != null ? four.hashCode() : 0);
+		result = 31 * result + (five != null ? five.hashCode() : 0);
+		result = 31 * result + (six != null ? six.hashCode() : 0);
+		result = 31 * result + (seven != null ? seven.hashCode() : 0);
+		result = 31 * result + (eight != null ? eight.hashCode() : 0);
+		result = 31 * result + (nine != null ? nine.hashCode() : 0);
+		return result;
+	}
 }
